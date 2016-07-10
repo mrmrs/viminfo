@@ -1,7 +1,8 @@
 const fs = require('fs')
 const path = require('path')
-const { __, assoc, compose, drop, head, isEmpty, keys, map, reduce, reject,
-  replace, split, tail, tap, trim } = require('ramda')
+const { __, assoc, compose, drop, head, isEmpty, map, reduce, reject, replace,
+  split, tail, trim } = require('ramda')
+const commands = require('./commands')
 
 // actualVimInfo :: _ -> path
 const actualVimInfo = () => {
@@ -41,16 +42,19 @@ const cleanTitle = compose(
 
 // title :: [str] -> str
 const title = compose(cleanTitle, head)
+
 // items :: [str] -> [str]
 const items = tail
+
 // intoObject :: {k: v} -> [str] -> {k: v}
 const intoObject = (acc, val) => assoc(title(val), items(val), acc)
+
 // removeIntro :: [str] -> [str]
 const removeIntro = drop(2)
 
 // processVimInfo :: str -> {k: v}
 const processVimInfo = compose(
-  tap(x => console.log(keys(x))),
+  // tap(x => console.log(keys(x))),
   reduce(intoObject, {}),
   removeIntro,
   rejectEmpty,
@@ -60,5 +64,6 @@ const processVimInfo = compose(
 
 fs.readFile(resolveInfoPath(process.argv), { encoding: 'utf-8' }, (err, res) => {
   if (err) { throw err }
-  return processVimInfo(res)
+  const info = processVimInfo(res)
+  console.log(commands(info['Command Line History']))
 })
