@@ -1,0 +1,22 @@
+{
+  "name": "viminfo",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrmrs/viminfo.git"
+  },
+  "author": "Adam Morse, Jon Gold",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrmrs/viminfo/issues"
+  },
+  "homepage": "https://github.com/mrmrs/viminfo#readme",
+  "dependencies": {
+    "ramda": "^0.21.0"
+  }
+}
