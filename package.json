@@ -12,6 +12,9 @@
   },
   "author": "Adam Morse, Jon Gold",
   "license": "MIT",
+  "engines": {
+    "node": ">= 6.0.0"
+  },
   "bugs": {
     "url": "https://github.com/mrmrs/viminfo/issues"
   },
