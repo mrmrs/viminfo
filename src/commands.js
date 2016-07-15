@@ -1,7 +1,6 @@
-const { any, append, compose, countBy, filter, head, identity, map, match, prop,
+const { append, compose, countBy, filter, head, identity, map, match, prop,
   reduce, reverse, sortBy, take, test, toPairs, values } = require('ramda');
 
-// saveAndQuit :: Regex
 const saveAndQuit = /:wq/;
 const split = /:split/;
 const vsplit = /:vsplit/;
@@ -11,31 +10,38 @@ const bnext = /:bnext/;
 // getCommand :: str -> str
 const getCommand = compose(head, match(/:(%s|\S+)/g));
 
+// plTimes :: int -> str
 const plTimes = t => t === 1 ? 'once' : `${t} times`;
 
+// testShorthand :: regex -> string -> ([command] -> result)
 const testShorthand = (pattern, replacement) =>
   commands => {
     const functions = map(getCommand)(commands);
     const filtered = filter(test(pattern), functions);
     if (filtered.length) {
+      const pluralized = plTimes(filtered.length);
       return {
-        message: `you used ${pattern} ${plTimes(filtered.length)}, use the shorthand ${replacement} instead`,
+        message: `you used ${pattern} ${pluralized}, use the shorthand ${replacement} instead`,
       };
     }
 
     return {};
   };
 
+// rules :: { k: Rule }
+//  Rule :: [command] -> result
 const rules = {
   shorthandSplit: testShorthand(split, ':sp'),
   shorthandVsplit: testShorthand(vsplit, ':vs'),
   shorthandHelp: testShorthand(help, ':h'),
   shorthandBnext: testShorthand(bnext, ':bn'),
+
   saves: (commands) => {
     const saves = filter(test(saveAndQuit), commands);
     if (saves) {
+      const pluralized = plTimes(saves.length);
       return {
-        message: `you used \`:wq\` ${saves.length} times, try \`ZZ\``,
+        message: `you used \`:wq\` ${pluralized}, try ZZ`,
       };
     }
     return {};
@@ -54,7 +60,7 @@ const rules = {
     const hhead = compose(head, head);
 
     return {
-      message: `Your most common command is \`${hhead(mc)}\``,
+      message: `Your most common command is ${hhead(mc)}`,
     };
   },
 };
