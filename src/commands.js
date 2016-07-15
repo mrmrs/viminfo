@@ -1,5 +1,5 @@
-const { append, compose, countBy, filter, head, identity, map, match, prop,
-  reduce, reverse, sortBy, take, test, toPairs, values } = require('ramda');
+const { all, append, compose, countBy, filter, head, identity, map, match, prop,
+  reduce, reverse, sortBy, tail, take, test, toPairs, values, zip } = require('ramda');
 
 const saveAndQuit = /:wq/;
 const split = /:split/;
@@ -35,6 +35,24 @@ const rules = {
   shorthandVsplit: testShorthand(vsplit, ':vs'),
   shorthandHelp: testShorthand(help, ':h'),
   shorthandBnext: testShorthand(bnext, ':bn'),
+
+  multipleQuits: (commands) => {
+    const functions = map(getCommand)(commands);
+    const offsetFunctions = tail(functions);
+
+    const result = reduce((acc, valAndNext) => {
+      if (all(test(/:q$/), valAndNext)) {
+        return append(true, acc);
+      }
+      return acc;
+    }, [], zip(functions, offsetFunctions));
+
+    if (result.length) {
+      return {
+        message: 'you used :q twice in a row - try :on(ly) to close all but one window',
+      };
+    }
+  },
 
   saves: (commands) => {
     const saves = filter(test(saveAndQuit), commands);
