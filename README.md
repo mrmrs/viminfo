@@ -22,7 +22,10 @@ of the interface could work a number of different ways (not mutually exclusive)
   - :split :sp
   - :vsplit :vsp
   - :bnext :bn
-
+- Suggest shortcut commands when chained commands are used i.e
+  - `d$` → `D`
+  - `li` → `a`
+  - `$i` → `A`
 ```
 You recorded 32 macros today
 You recorded 16 macros that you've recorded previously
